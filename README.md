@@ -1,7 +1,9 @@
 # 0dns
 
 This service is responsible for connecting to the network and fetching all the magic blocks from the network which are saved in the DB.
-There is a [Network API](#network-api) which can be used to get latest set of miners and sharders for the network using the magic block.## Table of Contents
+There is a [Network API](#network-api) which can be used to get latest set of miners and sharders for the network using the magic block.
+
+## Table of Contents
 
 - [Setup](#setup)
 - [Buildding and starting the node](#building-and-starting-the-node)
