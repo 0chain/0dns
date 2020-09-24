@@ -77,9 +77,9 @@ func initializeMagicBlock(magicBlockFile string) {
 }
 
 func initHandlers(r *mux.Router) {
-	r.HandleFunc("/", HomePageHandler)
-	r.HandleFunc("/network", NetworkDetailsHandler)
-	r.HandleFunc("/magic_block", LatestMagicBlockHandler)
+	r.HandleFunc("/", common.UserRateLimit(HomePageHandler))
+	r.HandleFunc("/network", common.UserRateLimit(NetworkDetailsHandler))
+	r.HandleFunc("/magic_block", common.UserRateLimit(LatestMagicBlockHandler))
 }
 
 var startTime time.Time

@@ -10,6 +10,9 @@ server_chain:
 
 port: 9091
 
+handlers:
+  rate_limit: 5 # 5 per second
+
 mongo:
   url: mongodb://mongodb:27017
   db_name: block-recorder
