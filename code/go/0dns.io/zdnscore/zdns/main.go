@@ -37,6 +37,8 @@ func initializeConfig() {
 	config.Configuration.MongoPoolSize = viper.GetInt64("mongo.pool_size")
 
 	config.Configuration.MagicBlockWorkerTimerInSeconds = viper.GetInt64("worker.magic_block_worker")
+
+	config.Configuration.UseHTTPS = viper.GetBool("use_https")
 }
 
 func initializeMagicBlock(magicBlockFile string) {

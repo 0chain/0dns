@@ -9,6 +9,7 @@ server_chain:
   signature_scheme: "bls0chain"
 
 port: 9091
+use_https: true
 
 handlers:
   rate_limit: 5 # 5 per second

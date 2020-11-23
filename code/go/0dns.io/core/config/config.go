@@ -50,6 +50,8 @@ type Config struct {
 
 	MagicBlockWorkerTimerInSeconds int64
 
+	UseHTTPS bool
+
 	CurrentMagicBlock *block.MagicBlock
 }
 
@@ -75,9 +77,9 @@ func (c *Config) SetMinerSharderNodes() {
 		panic("No magic block set")
 	}
 
-	networkProtocol := HTTPSProtocol
-	if Development() {
-		networkProtocol = HTTPProtocol
+	networkProtocol := HTTPProtocol
+	if c.UseHTTPS {
+		networkProtocol = HTTPSProtocol
 	}
 
 	var miners []string
