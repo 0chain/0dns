@@ -51,6 +51,7 @@ type Config struct {
 	MagicBlockWorkerTimerInSeconds int64
 
 	UseHTTPS bool
+	UsePath  bool
 
 	CurrentMagicBlock *block.MagicBlock
 }
@@ -88,11 +89,20 @@ func (c *Config) SetMinerSharderNodes() {
 		if strings.Contains(host, "localhost") {
 			host = miner.N2NHost
 		}
-		miners = append(miners,
-			networkProtocol+
-				host+
-				":"+
-				strconv.Itoa(miner.Port))
+
+		if c.UsePath {
+			miners = append(miners,
+				networkProtocol+
+					host+
+					"/"+
+					miner.Path)
+		} else {
+			miners = append(miners,
+				networkProtocol+
+					host+
+					":"+
+					strconv.Itoa(miner.Port))
+		}
 	}
 
 	var sharders []string
@@ -101,11 +111,19 @@ func (c *Config) SetMinerSharderNodes() {
 		if strings.Contains(host, "localhost") {
 			host = sharder.N2NHost
 		}
-		sharders = append(sharders,
-			networkProtocol+
-				host+
-				":"+
-				strconv.Itoa(sharder.Port))
+		if c.UsePath {
+			sharders = append(sharders,
+				networkProtocol+
+					host+
+					"/"+
+					sharder.Path)
+		} else {
+			sharders = append(sharders,
+				networkProtocol+
+					host+
+					":"+
+					strconv.Itoa(sharder.Port))
+		}
 	}
 
 	c.Miners = miners

@@ -10,6 +10,7 @@ server_chain:
 
 port: 9091
 use_https: true
+use_path: true
 
 handlers:
   rate_limit: 5 # 5 per second

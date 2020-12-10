@@ -39,6 +39,7 @@ func initializeConfig() {
 	config.Configuration.MagicBlockWorkerTimerInSeconds = viper.GetInt64("worker.magic_block_worker")
 
 	config.Configuration.UseHTTPS = viper.GetBool("use_https")
+	config.Configuration.UsePath = viper.GetBool("use_path")
 }
 
 func initializeMagicBlock(magicBlockFile string) {
