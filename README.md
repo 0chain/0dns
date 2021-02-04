@@ -119,3 +119,23 @@ If there is no test network, run the following command
 ```
 docker network create --driver=bridge --subnet=198.18.0.0/15 --gateway=198.18.0.255 testnet0
 ```
+
+## Troubleshooting
+
+1. When running locally, if `http://localhost:9091/network` is returning below. Some commands might fail.
+
+```
+{
+  "miners": [
+    "https://198.18.0.71/",
+    "https://198.18.0.72/",
+    "https://198.18.0.74/",
+    "https://198.18.0.73/"
+  ],
+  "sharders": [
+    "https://198.18.0.81/"
+  ]
+}
+```
+
+To fix the miner and sharder URLs so it works locally, update `docker.local/config/0dns.yaml` to disable both `use_https` and `use_path` (set to `false`).
