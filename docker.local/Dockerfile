@@ -2,17 +2,20 @@ FROM golang:1.11.4-alpine3.8 as zdns_build
 
 RUN apk add --update --no-cache build-base linux-headers git cmake bash perl grep
 
-# Install Herumi's cryptography
 RUN apk add gmp gmp-dev openssl-dev && \
     cd /tmp && \
     wget -O - https://github.com/herumi/mcl/archive/master.tar.gz | tar xz && \
-    wget -O - https://github.com/herumi/bls/archive/master.tar.gz | tar xz && \
     mv mcl* mcl && \
-    mv bls* bls && \
     make -C mcl -j $(nproc) lib/libmclbn256.so install && \
     cp mcl/lib/libmclbn256.so /usr/local/lib && \
-    make -C bls -j $(nproc) install && \
-    rm -R /tmp/mcl && \
+    rm -R /tmp/mcl
+
+RUN git clone https://github.com/herumi/bls /tmp/bls && \
+    cd /tmp/bls && \
+    git submodule init && \
+    git submodule update && \
+    make -j $(nproc) install && \
+    cd - && \
     rm -R /tmp/bls
 
 ENV SRC_DIR=/0dns
