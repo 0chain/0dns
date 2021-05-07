@@ -114,7 +114,7 @@ func main() {
 
 	var server *http.Server
 	r := mux.NewRouter()
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "access-control-allow-origin"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"GET"})
 	rHandler := handlers.CORS(originsOk, headersOk, methodsOk)(r)
