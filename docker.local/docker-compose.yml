@@ -3,13 +3,14 @@ services:
   mongodb:
     image: mongo
     volumes:
-      - ./0dns/mongodata:/data/db
+      - ${VOLUMES_MONGO_DATA}:/data/db
     networks:
       default:
       testnet0:
     ports:
       - "27017:27017"
-
+    labels:
+      zchain: "mongo"
   0dns:
     environment:
       - DOCKER=true
@@ -21,10 +22,12 @@ services:
     links:
       - mongodb:mongodb
     volumes:
-      - ./config:/0dns/config
-      - ./0dns/log:/0dns/log
+      - ${VOLUMES_CONFIG}:/0dns/config
+      - ${VOLUMES_LOG}:/0dns/log
     ports:
       - "9091:9091"
+    labels:
+      zchain: "0dns"
     networks:
       default:
       testnet0:
