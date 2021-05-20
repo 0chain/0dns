@@ -36,6 +36,9 @@ RUN go build -v -tags "bn256 development" -ldflags "-X 0chain.net/core/build.Bui
 
 # Copy the build artifact into a minimal runtime image:
 FROM golang:1.11.4-alpine3.8
+
+LABEL zchain="0dns"
+
 ENV APP_DIR=/0dns
 WORKDIR $APP_DIR
 RUN apk add gmp gmp-dev openssl-dev
