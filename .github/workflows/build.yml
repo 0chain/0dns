@@ -5,7 +5,7 @@ on:
      branches: [ gitactionsfix ]
 
 env:
-  BOX_REGISTRY: 0dnsreg/0dns
+  DNS_REGISTRY: 0dnsreg/0dns
 
 jobs:
    dockerize_dns:
@@ -25,8 +25,8 @@ jobs:
 
        - name: Build zdns
          run: |
-            docker build -t $BOX_REGISTRY:$TAG -f "$DOCKERFILE_BOX" .
-           # docker push $BOX_REGISTRY:$TAG
+            docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
+           # docker push $DNS_REGISTRY:$TAG
          env:
            TAG: ${{ steps.get_version.outputs.VERSION }}
-           DOCKERFILE_BOX: "docker.local/Dockerfile"
+           DOCKERFILE_DNS: "docker.local/Dockerfile"
