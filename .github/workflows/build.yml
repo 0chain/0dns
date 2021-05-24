@@ -1,8 +1,12 @@
 name: Dockerize
 
 on:
-   push:
-     branches: [ gitactionsfix ]
+  workflow_dispatch:
+    inputs:
+      latest_tag:
+        description: 'type yes for building latest tag'
+        default: 'no'
+        required: true
 
 env:
   DNS_REGISTRY: 0dnsreg/0dns
@@ -26,7 +30,18 @@ jobs:
        - name: Build zdns
          run: |
             docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
-           # docker push $DNS_REGISTRY:$TAG
+            docker tag $DNS_REGISTRY:$TAG $DNS_REGISTRY:latest
          env:
            TAG: ${{ steps.get_version.outputs.VERSION }}
            DOCKERFILE_DNS: "docker.local/Dockerfile"
+
+#        - name: Push image
+#          run: |
+#            if [[ "$PUSH_LATEST" == "yes" ]]; then
+#              docker push $DNS_REGISTRY:latest
+#            else
+#              docker push $DNS_REGISTRY:$TAG
+#            fi
+#          env:
+#            PUSH_LATEST: ${{ github.event.inputs.latest_tag }}
+#            TAG: ${{ steps.get_version.outputs.VERSION }}
