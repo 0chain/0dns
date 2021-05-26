@@ -9,7 +9,7 @@ on:
         required: true
 
 env:
-  DNS_REGISTRY: 0dnsreg/0dns
+  DNS_REGISTRY: ${{ secrets.DNS_REGISTRY }}
 
 jobs:
    dockerize_dns:
@@ -25,27 +25,28 @@ jobs:
             echo ::set-output name=BRANCH::${BRANCH}
             echo ::set-output name=VERSION::${BRANCH}-${SHORT_SHA}    
 
-           # - name: Login to Docker Hub
-           #   uses: docker/login-action@v1
-           #   with:
-           #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-           #     password: ${{ secrets.DOCKERHUB_PASSWORD }}
+       - name: Login to Docker Hub
+         uses: docker/login-action@v1
+         with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
        - name: Build zdns
          run: |
             docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
             docker tag $DNS_REGISTRY:$TAG $DNS_REGISTRY:latest
+            docker push $DNS_REGISTRY:latest
          env:
            TAG: ${{ steps.get_version.outputs.VERSION }}
            DOCKERFILE_DNS: "docker.local/Dockerfile"
 
-#        - name: Push image
-#          run: |
-#            if [[ "$PUSH_LATEST" == "yes" ]]; then
-#              docker push $DNS_REGISTRY:latest
-#            else
-#              docker push $DNS_REGISTRY:$TAG
-#            fi
-#          env:
-#            PUSH_LATEST: ${{ github.event.inputs.latest_tag }}
-#            TAG: ${{ steps.get_version.outputs.VERSION }}
+       - name: Push image 
+         run: |
+           if [[ "$PUSH_LATEST" == "yes" ]]; then
+             docker push $DNS_REGISTRY:latest
+           else
+             docker push $DNS_REGISTRY:$TAG
+           fi
+         env:
+           PUSH_LATEST: ${{ github.event.inputs.latest_tag }}
+           TAG: ${{ steps.get_version.outputs.VERSION }}
