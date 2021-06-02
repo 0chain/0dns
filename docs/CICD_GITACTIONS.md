@@ -39,7 +39,7 @@ env:
 Jobs are defined which contains the various steps for creating and pushing the builds. Runner envionment is also defined used for making the builds.
 ```
 jobs:
-   dockerize_box:
+   dockerize_dns:
        runs-on: ubuntu-20.04
 ```
 
@@ -59,28 +59,28 @@ Here different steps are defined used for creating the builds.
     BRANCH=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//-/g')
     SHORT_SHA=$(echo $GITHUB_SHA | head -c 8)
     echo ::set-output name=BRANCH::${BRANCH}
-    echo ::set-output name=VERSION::${BRANCH}-${SHORT_SHA}     
+    echo ::set-output name=VERSION::${BRANCH}-${SHORT_SHA}    
 - name: Login to Docker Hub
     uses: docker/login-action@v1
     with:
     username: ${{ secrets.DOCKERHUB_USERNAME }}
     password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-- name: Build zbox
+- name: Build zdns
     run: |
-    docker build -t $BOX_REGISTRY:$TAG -f "$DOCKERFILE_BOX" .
-    docker tag $BOX_REGISTRY:$TAG $BOX_REGISTRY:latest
-    docker push $BOX_REGISTRY:$TAG
+    docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
+    docker tag $DNS_REGISTRY:$TAG $DNS_REGISTRY:latest
+    docker push $DNS_REGISTRY:latest
     env:
     TAG: ${{ steps.get_version.outputs.VERSION }}
-    DOCKERFILE_BOX: "docker.local/Dockerfile"
+    DOCKERFILE_DNS: "docker.local/Dockerfile"
 
-- name: Push image
+- name: Push image 
     run: |
     if [[ "$PUSH_LATEST" == "yes" ]]; then
-        docker push $BOX_REGISTRY:latest
+        docker push $DNS_REGISTRY:latest
     else
-        docker push $BOX_REGISTRY:$TAG
+        docker push $DNS_REGISTRY:$TAG
     fi
     env:
     PUSH_LATEST: ${{ github.event.inputs.latest_tag }}
