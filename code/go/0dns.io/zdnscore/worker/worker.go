@@ -41,21 +41,21 @@ func FetchMagicBlock(ctx context.Context) {
 				continue
 			}
 
-			if models.CheckMagicBlockPresentInDB(ctx, magicBlock.MagicBlockNumber) {
-				Logger.Info("Magic block already present in the DB ", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
-				continue
-			}
-
-			err = models.InsertMagicBlock(ctx, magicBlock)
-			if err != nil {
-				Logger.Error("Failed to insert magic block to the DB", zap.Any("magic_block_number", magicBlock.MagicBlockNumber), zap.Error(err))
-				continue
-			}
-			Logger.Info("Insert maigc block successfully to the DB", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
-
-			if magicBlock.MagicBlockNumber-config.Configuration.CurrentMagicBlock.MagicBlockNumber > 1 {
-				go FetchOldMagicBlocks(ctx, magicBlock.MagicBlockNumber-1)
-			}
+			//if models.CheckMagicBlockPresentInDB(ctx, magicBlock.MagicBlockNumber) {
+			//	Logger.Info("Magic block already present in the DB ", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
+			//	continue
+			//}
+			//
+			//err = models.InsertMagicBlock(ctx, magicBlock)
+			//if err != nil {
+			//	Logger.Error("Failed to insert magic block to the DB", zap.Any("magic_block_number", magicBlock.MagicBlockNumber), zap.Error(err))
+			//	continue
+			//}
+			//Logger.Info("Insert maigc block successfully to the DB", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
+			//
+			//if magicBlock.MagicBlockNumber-config.Configuration.CurrentMagicBlock.MagicBlockNumber > 1 {
+			//	go FetchOldMagicBlocks(ctx, magicBlock.MagicBlockNumber-1)
+			//}
 
 			config.Configuration.UpdateMagicBlock(magicBlock)
 			config.Configuration.SetMinerSharderNodes()
@@ -84,7 +84,7 @@ func FetchOldMagicBlocks(ctx context.Context, number int64) {
 			Logger.Error("Failed to insert magic block to the DB", zap.Any("magic_block_number", magicBlock.MagicBlockNumber), zap.Error(err))
 			continue
 		}
-		Logger.Info("Insert maigc block successfully to the DB", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
+		Logger.Info("Insert magic block successfully to the DB", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
 		number--
 	}
 }
@@ -97,6 +97,8 @@ func GetMagicBlockByNumber(ctx context.Context, number int64) (m *block.MagicBlo
 	return fetchMagicBlock(ctx, fmt.Sprintf("%smagic_block_number=%d", GET_MAGIC_BLOCK_INFO, number))
 }
 
+// fetchMagicBlock - waits till we get the magic block from all the sharders
+// and returns the block which gets max consensus.
 func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, err error) {
 	numSharders := len(config.Configuration.Sharders)
 	var result = make(chan *util.GetResponse, numSharders)
@@ -127,10 +129,10 @@ func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, er
 			continue
 		}
 
-		m = respo.MagicBlock
 		var h = encryption.FastHash([]byte(respo.MagicBlock.Hash))
 		if roundConsensus[h]++; roundConsensus[h] > maxConsensus {
 			maxConsensus = roundConsensus[h]
+			m = respo.MagicBlock
 		}
 	}
 
@@ -138,7 +140,7 @@ func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, er
 		return nil, fmt.Errorf("magic block info not found")
 	}
 
-	return
+	return m, err
 }
 
 func queryMagicBlockFromSharders(ctx context.Context, query string, result chan *util.GetResponse) {

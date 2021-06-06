@@ -15,10 +15,10 @@ use_path: true
 handlers:
   rate_limit: 5 # 5 per second
 
-mongo:
-  url: mongodb://mongodb:27017
-  db_name: block-recorder
-  pool_size: 2
+#mongo:
+#  url: mongodb://mongodb:27017
+#  db_name: block-recorder
+#  pool_size: 2
 
 worker:
   magic_block_worker: 5 # in seconds

@@ -1,14 +1,14 @@
 version: "3"
 services:
-  mongodb:
-    image: mongo
-    volumes:
-      - ./0dns/mongodata:/data/db
-    networks:
-      default:
-      testnet0:
-    ports:
-      - "27017:27017"
+#  mongodb:
+#    image: mongo
+#    volumes:
+#      - ./0dns/mongodata:/data/db
+#    networks:
+#      default:
+#      testnet0:
+#    ports:
+#      - "27017:27017"
 
   0dns:
     environment:
@@ -16,10 +16,10 @@ services:
     build:
       context: ../
       dockerfile: ./docker.local/Dockerfile
-    depends_on:
-      - mongodb
-    links:
-      - mongodb:mongodb
+#    depends_on:
+#      - mongodb
+#    links:
+#      - mongodb:mongodb
     volumes:
       - ./config:/0dns/config
       - ./0dns/log:/0dns/log
@@ -39,4 +39,4 @@ networks:
 
 volumes:
   config:
-  mongodata:
+#  mongodata:

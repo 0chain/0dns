@@ -17,7 +17,6 @@ import (
 	"0dns.io/core/logging"
 	. "0dns.io/core/logging"
 
-	"0dns.io/zdnscore/models"
 	"0dns.io/zdnscore/worker"
 
 	"github.com/0chain/gosdk/core/block"
@@ -32,9 +31,9 @@ func initializeConfig() {
 	config.Configuration.SignatureScheme = viper.GetString("server_chain.signature_scheme")
 	config.Configuration.Port = viper.GetInt("port")
 
-	config.Configuration.MongoURL = viper.GetString("mongo.url")
-	config.Configuration.DBName = viper.GetString("mongo.db_name")
-	config.Configuration.MongoPoolSize = viper.GetInt64("mongo.pool_size")
+	//config.Configuration.MongoURL = viper.GetString("mongo.url")
+	//config.Configuration.DBName = viper.GetString("mongo.db_name")
+	//config.Configuration.MongoPoolSize = viper.GetInt64("mongo.pool_size")
 
 	config.Configuration.MagicBlockWorkerTimerInSeconds = viper.GetInt64("worker.magic_block_worker")
 
@@ -62,18 +61,18 @@ func initializeMagicBlock(magicBlockFile string) {
 		panic("Unable to unmarshal magic block bytes")
 	}
 
-	if !models.CheckMagicBlockPresentInDB(context.Background(), m.MagicBlockNumber) {
-		err = models.InsertMagicBlock(context.Background(), &m)
-		if err != nil {
-			Logger.Error("Failed to insert magic block to the DB", zap.Error(err))
-			panic("Unable to insert magic blockto the DB")
-		}
-	}
+	//if !models.CheckMagicBlockPresentInDB(context.Background(), m.MagicBlockNumber) {
+	//	err = models.InsertMagicBlock(context.Background(), &m)
+	//	if err != nil {
+	//		Logger.Error("Failed to insert magic block to the DB", zap.Error(err))
+	//		panic("Unable to insert magic blockto the DB")
+	//	}
+	//}
 
 	// fetch old blocks
-	if m.MagicBlockNumber != 1 {
-		go worker.FetchOldMagicBlocks(context.Background(), m.MagicBlockNumber-1)
-	}
+	//if m.MagicBlockNumber != 1 {
+	//	go worker.FetchOldMagicBlocks(context.Background(), m.MagicBlockNumber-1)
+	//}
 
 	config.Configuration.CurrentMagicBlock = &m
 	config.Configuration.SetMinerSharderNodes()
@@ -106,7 +105,7 @@ func main() {
 
 	common.SetupRootContext(context.Background())
 
-	checkForDBConnection(context.Background())
+	//checkForDBConnection(context.Background())
 
 	initializeMagicBlock(*magicBlockFile)
 
@@ -138,7 +137,7 @@ func main() {
 
 	common.ConfigRateLimits()
 	initHandlers(r)
-	go worker.SetupWorkers(context.Background())
+	worker.SetupWorkers(context.Background())
 
 	startTime = time.Now().UTC()
 	Logger.Info("Ready to listen to the requests on ", zap.Any("port", config.Configuration.Port))
