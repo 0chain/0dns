@@ -18,7 +18,7 @@ There is a [Network API](#network-api) which can be used to get latest set of mi
 Clone the repo and run the following command inside the cloned directory
 
 ```
-$ ./docker.local/bin/init.sh
+./docker.local/bin/init.sh
 ```
 
 ## Building and Starting the Node
@@ -26,13 +26,13 @@ $ ./docker.local/bin/init.sh
 If there is new code, do a git pull and run the following command
 
 ```
-$ ./docker.local/bin/build.sh
+./docker.local/bin/build.sh
 ```
 
 Go to the bin directory (cd docker.local/bin) and run the container using
 
 ```
-$ ./start.sh
+./start.sh
 ```
 
 ## Point to another blockchain
@@ -109,7 +109,7 @@ worker:
 Get rid of old data when the blockchain is restarted or if you point to a different network:
 
 ```
-$ ./docker.local/bin/clean.sh
+./docker.local/bin/clean.sh
 ```
 
 ## Network issue
