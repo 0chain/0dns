@@ -1,5 +1,5 @@
 #!/bin/sh
-PWD=`pwd`
+PWD=$(pwd)
 
 echo Starting 0dns ...
 

@@ -44,10 +44,6 @@ type Config struct {
 	Miners          []string
 	Sharders        []string
 
-	MongoURL      string
-	DBName        string
-	MongoPoolSize int64
-
 	MagicBlockWorkerTimerInSeconds int64
 
 	UseHTTPS bool

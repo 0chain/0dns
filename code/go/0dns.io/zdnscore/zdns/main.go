@@ -13,11 +13,9 @@ import (
 
 	"0dns.io/core/common"
 	"0dns.io/core/config"
-	"0dns.io/core/datastore"
 	"0dns.io/core/logging"
 	. "0dns.io/core/logging"
 
-	"0dns.io/zdnscore/models"
 	"0dns.io/zdnscore/worker"
 
 	"github.com/0chain/gosdk/core/block"
@@ -31,10 +29,6 @@ func initializeConfig() {
 	config.Configuration.ChainID = viper.GetString("server_chain.id")
 	config.Configuration.SignatureScheme = viper.GetString("server_chain.signature_scheme")
 	config.Configuration.Port = viper.GetInt("port")
-
-	config.Configuration.MongoURL = viper.GetString("mongo.url")
-	config.Configuration.DBName = viper.GetString("mongo.db_name")
-	config.Configuration.MongoPoolSize = viper.GetInt64("mongo.pool_size")
 
 	config.Configuration.MagicBlockWorkerTimerInSeconds = viper.GetInt64("worker.magic_block_worker")
 
@@ -60,19 +54,6 @@ func initializeMagicBlock(magicBlockFile string) {
 	if err != nil {
 		Logger.Error("Failed to unmarshal magic block bytes", zap.Error(err))
 		panic("Unable to unmarshal magic block bytes")
-	}
-
-	if !models.CheckMagicBlockPresentInDB(context.Background(), m.MagicBlockNumber) {
-		err = models.InsertMagicBlock(context.Background(), &m)
-		if err != nil {
-			Logger.Error("Failed to insert magic block to the DB", zap.Error(err))
-			panic("Unable to insert magic blockto the DB")
-		}
-	}
-
-	// fetch old blocks
-	if m.MagicBlockNumber != 1 {
-		go worker.FetchOldMagicBlocks(context.Background(), m.MagicBlockNumber-1)
 	}
 
 	config.Configuration.CurrentMagicBlock = &m
@@ -106,7 +87,7 @@ func main() {
 
 	common.SetupRootContext(context.Background())
 
-	checkForDBConnection(context.Background())
+	//checkForDBConnection(context.Background())
 
 	initializeMagicBlock(*magicBlockFile)
 
@@ -138,7 +119,7 @@ func main() {
 
 	common.ConfigRateLimits()
 	initHandlers(r)
-	go worker.SetupWorkers(context.Background())
+	worker.SetupWorkers(context.Background())
 
 	startTime = time.Now().UTC()
 	Logger.Info("Ready to listen to the requests on ", zap.Any("port", config.Configuration.Port))
@@ -170,25 +151,4 @@ func LatestMagicBlockHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(magicBlock)
-}
-
-func checkForDBConnection(ctx context.Context) {
-	retries := 0
-	var err error
-	for retries < 600 {
-		Logger.Info("Trying to connect to mongoDB ...")
-		err = datastore.GetStore().Open(ctx)
-		if err != nil {
-			time.Sleep(1 * time.Second)
-			retries++
-			continue
-		}
-		Logger.Info("DB Connection done.")
-		break
-	}
-
-	if err != nil {
-		Logger.Error("Error in opening the database. Shutting the server down")
-		panic(err)
-	}
 }
