@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/0chain/gosdk/core/common/errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -40,20 +41,20 @@ func initializeMagicBlock(magicBlockFile string) {
 	magicBlock, err := os.Open(magicBlockFile)
 	if err != nil {
 		Logger.Error("Failed to read magic block with error", zap.Error(err))
-		panic("unable to read magic block file")
+		panic(errors.Wrap(err,"unable to read magic block file"))
 	}
 
 	magicBlockBytes, err := ioutil.ReadAll(magicBlock)
 	if err != nil {
 		Logger.Error("Failed to read magic block with error", zap.Error(err))
-		panic("unable to read magic block file")
+		panic(errors.Wrap(err, "unable to read magic block file"))
 	}
 
 	var m block.MagicBlock
 	err = json.Unmarshal(magicBlockBytes, &m)
 	if err != nil {
 		Logger.Error("Failed to unmarshal magic block bytes", zap.Error(err))
-		panic("Unable to unmarshal magic block bytes")
+		panic(errors.Wrap(err, "Unable to unmarshal magic block bytes"))
 	}
 
 	config.Configuration.CurrentMagicBlock = &m
@@ -86,8 +87,6 @@ func main() {
 	initializeConfig()
 
 	common.SetupRootContext(context.Background())
-
-	//checkForDBConnection(context.Background())
 
 	initializeMagicBlock(*magicBlockFile)
 

@@ -1,7 +1,7 @@
 package config
 
 import (
-	"fmt"
+	"github.com/0chain/gosdk/core/common/errors"
 	"strconv"
 	"strings"
 
@@ -23,7 +23,7 @@ func SetupConfig() {
 	viper.AddConfigPath("./config")
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("fatal error config file: %s", err))
+		panic(errors.Wrap(err, "fatal error with config file"))
 	}
 }
 
