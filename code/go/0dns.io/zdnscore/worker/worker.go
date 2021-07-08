@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/0chain/gosdk/core/common/errors"
 	"net/http"
 	"time"
 
@@ -50,10 +51,6 @@ func GetLatestFinalizedMagicBlock(ctx context.Context) (m *block.MagicBlock, err
 	return fetchMagicBlock(ctx, GET_LATEST_FINALIZED_MAGIC_BLOCK)
 }
 
-func GetMagicBlockByNumber(ctx context.Context, number int64) (m *block.MagicBlock, err error) {
-	return fetchMagicBlock(ctx, fmt.Sprintf("%smagic_block_number=%d", GET_MAGIC_BLOCK_INFO, number))
-}
-
 // fetchMagicBlock - waits till we get the magic block from all the sharders
 // and returns the block which gets max consensus.
 func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, err error) {
@@ -94,7 +91,7 @@ func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, er
 	}
 
 	if maxConsensus == 0 {
-		return nil, fmt.Errorf("magic block info not found")
+		return nil, errors.New("magic block info not found")
 	}
 
 	return m, err
