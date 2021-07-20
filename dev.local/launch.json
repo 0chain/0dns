@@ -13,14 +13,10 @@
             "buildFlags":"-tags bn256",
             "args": [
                 "--deployment_mode", "0",
-                "--magic_block", "../../../../../dev.local/config/magic_block.json",
-                "--config_dir", "../../../../../dev.local/config",
-                "--log_dir", "../../../../../dev.local/data/log"
+                "--magic_block", "../../../../../dev.local/data/config/magic_block.json",
+                "--config_dir", "../../../../../dev.local/data/config",
+                "--log_dir", "../../../../../dev.local/data"
             ]
-            // "env": {
-            //     "CGO_LDFLAGS":"-L/usr/local/opt/openssl@1.1/lib",
-            //     "CGO_CPPFLAGS":"-I/usr/local/opt/openssl@1.1/include"
-            // }
         }
     ]
 }
