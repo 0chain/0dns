@@ -2,35 +2,34 @@ FROM golang:1.11.4-alpine3.8 as zdns_build
 
 RUN apk add --update --no-cache build-base linux-headers git cmake bash perl grep
 
-RUN apk add gmp gmp-dev openssl-dev && \
-    cd /tmp && \
-    wget -O - https://github.com/herumi/mcl/archive/master.tar.gz | tar xz && \
-    mv mcl* mcl && \
-    make -C mcl -j $(nproc) lib/libmclbn256.so install && \
-    cp mcl/lib/libmclbn256.so /usr/local/lib && \
-    rm -R /tmp/mcl
+# RUN apk add gmp gmp-dev openssl-dev && \
+#     cd /tmp && \
+#     wget -O - https://github.com/herumi/mcl/archive/master.tar.gz | tar xz && \
+#     mv mcl* mcl && \
+#     make -C mcl -j $(nproc) lib/libmclbn256.so install && \
+#     cp mcl/lib/libmclbn256.so /usr/local/lib && \
+#     rm -R /tmp/mcl
 
-RUN git clone https://github.com/herumi/bls /tmp/bls && \
-    cd /tmp/bls && \
-    git submodule init && \
-    git submodule update && \
-    make -j $(nproc) install && \
-    cd - && \
-    rm -R /tmp/bls
+# RUN git clone https://github.com/herumi/bls /tmp/bls && \
+#     cd /tmp/bls && \
+#     git submodule init && \
+#     git submodule update && \
+#     make -j $(nproc) install && \
+#     cd - && \
+#     rm -R /tmp/bls
 
 ENV SRC_DIR=/0dns
 ENV GO111MODULE=on
 
 # Download the dependencies:
 # Will be cached if we don't change mod/sum files
-COPY ./code/go/0dns.io/core/go.mod          ./code/go/0dns.io/core/go.sum          $SRC_DIR/go/0dns.io/core/
-COPY ./code/go/0dns.io/zdnscore/go.mod     ./code/go/0dns.io/zdnscore/go.sum     $SRC_DIR/go/0dns.io/zdnscore/
+
+# Add the source code:
+ADD ./code/go/0dns.io $SRC_DIR/go/0dns.io
 
 WORKDIR $SRC_DIR/go/0dns.io/zdnscore/zdns
 RUN go mod download
 
-# Add the source code:
-ADD ./code/go/0dns.io $SRC_DIR/go/0dns.io
 
 RUN go build -v -tags "bn256 development" -ldflags "-X 0chain.net/core/build.BuildTag=$GIT_COMMIT"
 
