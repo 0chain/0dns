@@ -32,8 +32,10 @@ install_debuggger() {
 start() {
 
     cd $root
+    echo "[1/3] copy config..."
+    [ -d ./data/config ] && rm -rf ./data/config
     
-    [ -d ./data/config ] || mkdir -p ./data/config
+    mkdir -p ./data/config
 
     cp -f ../docker.local/config/0dns.yaml ./data/config/
     find ./data/config -name "0dns.yaml" -exec sed -i '' 's/use_https: true/use_https: false/g' {} \;
@@ -52,6 +54,8 @@ start() {
 
     cd $code
 
+    echo "[2/3] build 0dns..."
+
     cd ./zdnscore/zdns
 
     # Build bls with CGO_LDFLAGS and CGO_CPPFLAGS to fix `ld: library not found for -lcrypto`
@@ -61,6 +65,7 @@ start() {
     GIT_COMMIT=$GIT_COMMIT
     go build -o $root/data/zdns -v -tags "bn256 development" -ldflags "-X 0chain.net/core/build.BuildTag=$GIT_COMMIT"
 
+    echo "[3/3] start 0dns..."
     cd $root/data/
     ./zdns --deployment_mode 0 --magic_block $zdns/dev.local/data/config/magic_block.json --config_dir $zdns/dev.local/data/config --log_dir $zdns/dev.local/data/log
 }
