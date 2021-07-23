@@ -1,35 +1,20 @@
 FROM golang:1.11.4-alpine3.8 as zdns_build
 
-RUN apk add --update --no-cache build-base linux-headers git cmake bash perl grep
 
-# RUN apk add gmp gmp-dev openssl-dev && \
-#     cd /tmp && \
-#     wget -O - https://github.com/herumi/mcl/archive/master.tar.gz | tar xz && \
-#     mv mcl* mcl && \
-#     make -C mcl -j $(nproc) lib/libmclbn256.so install && \
-#     cp mcl/lib/libmclbn256.so /usr/local/lib && \
-#     rm -R /tmp/mcl
-
-# RUN git clone https://github.com/herumi/bls /tmp/bls && \
-#     cd /tmp/bls && \
-#     git submodule init && \
-#     git submodule update && \
-#     make -j $(nproc) install && \
-#     cd - && \
-#     rm -R /tmp/bls
+RUN apk add --update --no-cache build-base git
 
 ENV SRC_DIR=/0dns
 ENV GO111MODULE=on
 
-# Download the dependencies:
-# Will be cached if we don't change mod/sum files
 
 # Add the source code:
 ADD ./code/go/0dns.io $SRC_DIR/go/0dns.io
 
+# Download the dependencies:
 WORKDIR $SRC_DIR/go/0dns.io/zdnscore/zdns
-RUN go mod download
 
+
+RUN go mod download
 
 RUN go build -v -tags "bn256 development" -ldflags "-X 0chain.net/core/build.BuildTag=$GIT_COMMIT"
 
@@ -37,9 +22,6 @@ RUN go build -v -tags "bn256 development" -ldflags "-X 0chain.net/core/build.Bui
 FROM golang:1.11.4-alpine3.8
 ENV APP_DIR=/0dns
 WORKDIR $APP_DIR
-RUN apk add gmp gmp-dev openssl-dev
-COPY --from=zdns_build  /usr/local/lib/libmcl*.so \
-                        /usr/local/lib/libbls*.so \
-                        /usr/local/lib/
+
 COPY --from=zdns_build $APP_DIR/go/0dns.io/zdnscore/zdns/zdns $APP_DIR/bin/zdns
 
