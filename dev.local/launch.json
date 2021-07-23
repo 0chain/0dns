@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [       
+        {
+            "name": "debug:0dns",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/zdnscore/zdns",
+            "buildFlags":"-tags bn256",
+            "args": [
+                "--deployment_mode", "0",
+                "--magic_block", "../../../../../dev.local/data/config/magic_block.json",
+                "--config_dir", "../../../../../dev.local/data/config",
+                "--log_dir", "../../../../../dev.local/data"
+            ]
+        }
+    ]
+}

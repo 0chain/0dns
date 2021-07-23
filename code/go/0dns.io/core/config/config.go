@@ -15,12 +15,18 @@ func SetupDefaultConfig() {
 }
 
 /*SetupConfig - setup the configuration system */
-func SetupConfig() {
+func SetupConfig(configDir string) {
 	replacer := strings.NewReplacer(".", "_")
 	viper.SetEnvKeyReplacer(replacer)
 	viper.AutomaticEnv()
 	viper.SetConfigName("0dns")
-	viper.AddConfigPath("./config")
+
+	if len(configDir) > 0 {
+		viper.AddConfigPath(configDir)
+	} else {
+		viper.AddConfigPath("./config")
+	}
+
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
 		panic(fmt.Errorf("fatal error config file: %s", err))
