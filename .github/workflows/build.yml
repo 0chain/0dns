@@ -1,4 +1,4 @@
-name: Dockerize
+name: BUILD_0DNS
 
 on:
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
          run: |
             docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
             docker tag $DNS_REGISTRY:$TAG $DNS_REGISTRY:latest
-            docker push $DNS_REGISTRY:latest
+            docker push $DNS_REGISTRY:$TAG
          env:
            TAG: ${{ steps.get_version.outputs.VERSION }}
            DOCKERFILE_DNS: "docker.local/Dockerfile"
@@ -44,8 +44,6 @@ jobs:
          run: |
            if [[ "$PUSH_LATEST" == "yes" ]]; then
              docker push $DNS_REGISTRY:latest
-           else
-             docker push $DNS_REGISTRY:$TAG
            fi
          env:
            PUSH_LATEST: ${{ github.event.inputs.latest_tag }}
