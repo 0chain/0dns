@@ -2,6 +2,7 @@ package logging
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -13,8 +14,8 @@ var (
 	Logger *zap.Logger
 )
 
-func InitLogging(mode string) {
-	var logName = "log/0dns.log"
+func InitLogging(mode string, logDir string) {
+	var logName = filepath.Join(logDir, "log/0dns.log")
 
 	var logWriter = getWriteSyncer(logName)
 

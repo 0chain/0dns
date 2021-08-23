@@ -1,4 +1,4 @@
-name: Dockerize
+name: BUILD_0DNS
 
 on:
   workflow_dispatch:
@@ -31,22 +31,24 @@ jobs:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-       - name: Build zdns
+       - name: Build 0dns Docker Image
          run: |
             docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
             docker tag $DNS_REGISTRY:$TAG $DNS_REGISTRY:latest
-            docker push $DNS_REGISTRY:latest
+            docker tag $DNS_REGISTRY:$TAG $DNS_REGISTRY:staging
+            docker push $DNS_REGISTRY:$TAG
          env:
            TAG: ${{ steps.get_version.outputs.VERSION }}
            DOCKERFILE_DNS: "docker.local/Dockerfile"
 
-       - name: Push image 
+       - name: Push 0dns Docker Image
          run: |
-           if [[ "$PUSH_LATEST" == "yes" ]]; then
+           if [[ "$PUSH_LATEST" == "yes" ]] && [[ "$BRANCH" == "master" ]]; then
              docker push $DNS_REGISTRY:latest
-           else
-             docker push $DNS_REGISTRY:$TAG
+           elif   [[ "$BRANCH" == "staging" ]]; then
+             docker push $DNS_REGISTRY:staging
            fi
          env:
            PUSH_LATEST: ${{ github.event.inputs.latest_tag }}
            TAG: ${{ steps.get_version.outputs.VERSION }}
+           BRANCH: ${{ steps.get_version.outputs.BRANCH }}

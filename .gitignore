@@ -1,3 +1,7 @@
 .DS_Store
 
 **/docker.local/0dns*
+.vscode
+dev.local/data
+__debug_bin
+.idea
