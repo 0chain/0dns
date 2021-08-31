@@ -6,6 +6,6 @@
 version: 2
 updates:
   - package-ecosystem: "gomod" # See documentation for possible values
-    directory: "/0dns/code/go/0dns.io/" # Location of package manifests
+    directory: "/0dns/code/go/0dns.io" # Location of package manifests
     schedule:
       interval: "daily"
