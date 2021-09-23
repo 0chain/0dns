@@ -13,7 +13,7 @@ env:
 
 jobs:
    dockerize_dns:
-       runs-on: ubuntu-20.04
+       runs-on: [self-hosted, build]
        steps:
        - uses: actions/checkout@v2
 
@@ -45,7 +45,7 @@ jobs:
          run: |
            if [[ "$PUSH_LATEST" == "yes" ]] && [[ "$BRANCH" == "master" ]]; then
              docker push $DNS_REGISTRY:latest
-           elif   [[ "$BRANCH" == "staging" ]]; then
+           elif [[ "$PUSH_LATEST" == "yes" ]] && [[ "$BRANCH" == "staging" ]]; then
              docker push $DNS_REGISTRY:staging
            fi
          env:
