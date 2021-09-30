@@ -1,6 +1,8 @@
 name: Mirror repo to S3
 on:
-  push:
+  schedule:
+    # Runs everyday at 12 am
+    - cron: '0 0 0 * * ?'
 jobs:
   s3Backup:
     runs-on: docker-builds
@@ -15,6 +17,6 @@ jobs:
           aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
           aws-region: us-east-2
-      - name: S3 Backup
+      - name: Backup to s3
         run: |
           aws s3 sync /github-backup/0dns s3://${{ secrets.MIRROR_TARGET }}/0dns
