@@ -16,6 +16,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
       - name: S3 Backup
         run: |
           aws s3 sync /github-backup/0dns.tar.gz s3://${{ secrets.MIRROR_TARGET }}/0dns.tar.gz
