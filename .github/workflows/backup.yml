@@ -3,6 +3,7 @@ on:
   schedule:
     # Runs everyday at 12 am
     - cron: '0 0 * * * '
+  workflow_dispatch:
 jobs:
   s3Backup:
     runs-on: docker-builds
@@ -11,6 +12,8 @@ jobs:
       - name: Create backup
         run: |
           github-backup 0chain -P -t ${{ secrets.ACCESS_TOKEN }} --output-directory=/github-backup/0dns --all -O -R 0dns
+      - name: Create zip
+        run: zip -r 0dns.zip /github-backup/0dns
       - name: Set AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -19,4 +22,4 @@ jobs:
           aws-region: us-east-2
       - name: Backup to s3
         run: |
-          aws s3 sync /github-backup/0dns s3://${{ secrets.MIRROR_TARGET }}/0dns
+          aws s3 cp 0dns.zip s3://${{ secrets.MIRROR_TARGET }}/0dns.zip
