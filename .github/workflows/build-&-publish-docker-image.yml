@@ -1,4 +1,4 @@
-name: BUILD_0DNS
+name: build-&-publish-docker-image
 
 on:
   workflow_dispatch:
