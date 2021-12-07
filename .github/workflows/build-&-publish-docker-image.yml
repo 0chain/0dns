@@ -1,6 +1,8 @@
-name: BUILD_0DNS
+name: build-&-publish-docker-image
 
 on:
+  push:
+    branches: [ staging ]
   workflow_dispatch:
     inputs:
       latest_tag:
@@ -45,7 +47,7 @@ jobs:
          run: |
            if [[ "$PUSH_LATEST" == "yes" ]] && [[ "$BRANCH" == "master" ]]; then
              docker push $DNS_REGISTRY:latest
-           elif [[ "$PUSH_LATEST" == "yes" ]] && [[ "$BRANCH" == "staging" ]]; then
+           elif [[ "$BRANCH" == "staging" ]]; then
              docker push $DNS_REGISTRY:staging
            fi
          env:
