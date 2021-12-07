@@ -19,7 +19,6 @@ import (
 	"0dns.io/zdnscore/worker"
 
 	"github.com/0chain/gosdk/core/block"
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -61,6 +60,9 @@ func initializeMagicBlock(magicBlockFile string) {
 }
 
 func initHandlers(r *mux.Router) {
+
+	r.Use(useCors)
+
 	r.HandleFunc("/", common.UserRateLimit(HomePageHandler))
 	r.HandleFunc("/network", common.UserRateLimit(NetworkDetailsHandler))
 	r.HandleFunc("/magic_block", common.UserRateLimit(LatestMagicBlockHandler))
@@ -96,16 +98,13 @@ func main() {
 
 	var server *http.Server
 	r := mux.NewRouter()
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
-	originsOk := handlers.AllowedOrigins([]string{"*"})
-	methodsOk := handlers.AllowedMethods([]string{"GET"})
-	rHandler := handlers.CORS(originsOk, headersOk, methodsOk)(r)
+
 	if config.Development() {
 		server = &http.Server{
 			Addr:           address,
 			ReadTimeout:    30 * time.Second,
 			MaxHeaderBytes: 1 << 20,
-			Handler:        rHandler,
+			Handler:        r,
 		}
 	} else {
 		server = &http.Server{
@@ -113,7 +112,7 @@ func main() {
 			ReadTimeout:    30 * time.Second,
 			WriteTimeout:   30 * time.Second,
 			MaxHeaderBytes: 1 << 20,
-			Handler:        rHandler,
+			Handler:        r,
 		}
 	}
 	common.HandleShutdown(server)
