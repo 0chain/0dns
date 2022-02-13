@@ -50,10 +50,9 @@ jobs:
          env:
            DOCKERFILE_DNS: "docker.local/Dockerfile"
 
-      - name: Push latest
-          if: ${{ github.ref == 'refs/heads/master' }}
-          run: |
-            docker push $DNS_REGISTRY:latest
+       - name: Push latest
+         if: ${{ github.ref == 'refs/heads/master' }}
+         run: docker push $DNS_REGISTRY:latest
 
    system-tests:
      if: github.event_name != 'workflow_dispatch'
