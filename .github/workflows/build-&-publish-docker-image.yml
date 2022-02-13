@@ -37,7 +37,7 @@ jobs:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-       - name: Build 0dns Docker Image
+       - name: Build & Publish 0dns Docker Image
          run: |
             docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
             docker tag $DNS_REGISTRY:latest $DNS_REGISTRY:$TAG
