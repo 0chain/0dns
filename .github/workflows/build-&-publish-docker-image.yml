@@ -1,6 +1,11 @@
 name: build-&-publish-docker-image
 
+concurrency:
+  group: "publish-${{ github.ref }}"
+  cancel-in-progress: true
+
 on:
+  pull_request:
   push:
     branches: [ staging ]
   workflow_dispatch:
