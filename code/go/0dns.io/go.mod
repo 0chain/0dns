@@ -1,18 +1,37 @@
 module 0dns.io
 
 require (
-	github.com/0chain/gosdk v1.1.8
+	github.com/0chain/gosdk v1.7.6
 	github.com/didip/tollbooth v4.0.2+incompatible
-	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
-	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
-	github.com/pelletier/go-toml v1.4.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/spf13/viper v1.7.1
-	go.uber.org/zap v1.15.0
-	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
-	golang.org/x/text v0.3.3 // indirect
+	github.com/spf13/viper v1.9.0
+	go.uber.org/zap v1.19.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 
-go 1.14
+require (
+	github.com/0chain/errors v1.0.3 // indirect
+	github.com/fsnotify/fsnotify v1.5.1 // indirect
+	github.com/google/uuid v1.3.0 // indirect
+	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/lithammer/shortuuid/v3 v3.0.7 // indirect
+	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/mitchellh/mapstructure v1.4.2 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
+	github.com/pelletier/go-toml v1.9.4 // indirect
+	github.com/spf13/afero v1.6.0 // indirect
+	github.com/spf13/cast v1.4.1 // indirect
+	github.com/spf13/jwalterweatherman v1.1.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/subosito/gotenv v1.2.0 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
+	go.uber.org/multierr v1.7.0 // indirect
+	golang.org/x/crypto v0.0.0-20220307211146-efcb8507fb70 // indirect
+	golang.org/x/sys v0.0.0-20220405210540-1e041c57c461 // indirect
+	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/time v0.0.0-20211116232009-f0f3c7e86c11 // indirect
+	gopkg.in/ini.v1 v1.64.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+)
+
+go 1.18

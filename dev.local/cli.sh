@@ -44,12 +44,12 @@ start() {
 
     cp -f ../../0chain/docker.local/config/b0magicBlock_4_miners_2_sharders.json ./data/config/magic_block.json
 
-    find ./data/config -name "magic_block.json" -exec sed -i '' 's/198.18.0.71/127.0.0.1/g' {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.72/127.0.0.1/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.73/127.0.0.1/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.74/127.0.0.1/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.81/127.0.0.1/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.82/127.0.0.1/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.71/${hostname}/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.72/${hostname}/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.73/${hostname}/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.74/${hostname}/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.81/${hostname}/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.82/${hostname}/g" {} \;
     
 
     cd $code
@@ -57,10 +57,6 @@ start() {
     echo "[2/3] build 0dns..."
 
     cd ./zdnscore/zdns
-
-    # Build bls with CGO_LDFLAGS and CGO_CPPFLAGS to fix `ld: library not found for -lcrypto`
-    export CGO_LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
-    export CGO_CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
 
     GIT_COMMIT=$GIT_COMMIT
     go build -o $root/data/zdns -v -tags "bn256 development" -ldflags "-X 0chain.net/core/build.BuildTag=$GIT_COMMIT"
