@@ -16,6 +16,7 @@ cd $root
 hostname=`ifconfig | grep "inet " | grep -Fv 127.0.0.1 | grep broadcast | awk '{print $2}'`
 
 
+
 #clean all data
 clean() {
     cd $root
@@ -44,12 +45,12 @@ start() {
 
     cp -f ../../0chain/docker.local/config/b0magicBlock_4_miners_2_sharders.json ./data/config/magic_block.json
 
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.71/${hostname}/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.72/${hostname}/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.73/${hostname}/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.74/${hostname}/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.81/${hostname}/g" {} \;
-    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.82/${hostname}/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.71/127.0.0.1/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.72/127.0.0.1/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.73/127.0.0.1/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.74/127.0.0.1/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.81/127.0.0.1/g" {} \;
+    find ./data/config -name "magic_block.json" -exec sed -i '' "s/198.18.0.82/127.0.0.1/g" {} \;
     
 
     cd $code
