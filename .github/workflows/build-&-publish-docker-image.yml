@@ -1,4 +1,4 @@
-name: build-&-publish-docker-image
+name: Dockerize
 
 concurrency:
   group: "publish-${{ github.ref }}"
@@ -14,7 +14,8 @@ env:
   DNS_REGISTRY: ${{ secrets.DNS_REGISTRY }}
 
 jobs:
-   dockerize_dns:
+   zdns:
+       name: "0dns"
        runs-on: [self-hosted, build]
        steps:
        - name: Set docker image tag
@@ -39,12 +40,12 @@ jobs:
 
        - name: Build & Publish 0dns Docker Image
          run: |
-            docker build -t $DNS_REGISTRY:$TAG -f "$DOCKERFILE_DNS" .
-            docker tag $DNS_REGISTRY:latest $DNS_REGISTRY:$TAG
+            docker build -t zdns:latest -f "$DOCKERFILE_DNS" .
+            docker tag zdns:latest $DNS_REGISTRY:$TAG
             docker push $DNS_REGISTRY:$TAG
 
             SHORT_SHA=$(echo ${{ env.SHA }} | head -c 8)
-            docker tag $DNS_REGISTRY:latest $DNS_REGISTRY:$TAG-$SHORT_SHA
+            docker tag zdns:latest $DNS_REGISTRY:$TAG-$SHORT_SHA
             docker push $DNS_REGISTRY:$TAG-$SHORT_SHA
 
          env:
@@ -56,7 +57,7 @@ jobs:
 
    system-tests:
      if: github.event_name != 'workflow_dispatch'
-     needs: dockerize_dns
+     needs: zdns
      runs-on: [ tests-suite ]
      steps:
        - name: "Get current PR"
