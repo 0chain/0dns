@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"0dns.io/core/logging"
 	"github.com/0chain/gosdk/core/block"
 	"github.com/spf13/viper"
 )
@@ -130,4 +131,7 @@ func (c *Config) SetMinerSharderNodes() {
 
 	c.Miners = miners
 	c.Sharders = sharders
+
+	logging.Logger.Info("miners: " + strings.Join(miners, ", "))
+	logging.Logger.Info("sharders: " + strings.Join(sharders, ", "))
 }
