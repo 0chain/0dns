@@ -1,7 +1,7 @@
 module 0dns.io
 
 require (
-	github.com/0chain/gosdk v1.7.6
+	github.com/0chain/gosdk v1.7.7
 	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/spf13/viper v1.9.0
