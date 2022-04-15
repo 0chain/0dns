@@ -55,7 +55,7 @@ jobs:
       blobber_branch: ${{ github.event.inputs.blobber_branch }}
       validator_branch: ${{ github.event.inputs.validator_branch }}
       zbox_branch: staging
-      zblock_branch: ${{ github.event.inputs.zblock_branch }}
+      zblock_branch: staging
       authorizer_branch: ${{ github.event.inputs.authorizer_branch }}
       explorer_branch: ${{ github.event.inputs.explorer_branch }}
       zproxy_branch: staging
