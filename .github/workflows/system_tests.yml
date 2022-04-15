@@ -57,7 +57,7 @@ jobs:
       zbox_branch: staging
       zblock_branch: staging
       authorizer_branch: ${{ github.event.inputs.authorizer_branch }}
-      explorer_branch: ${{ github.event.inputs.explorer_branch }}
+      explorer_branch: master
       zproxy_branch: staging
       zsearch_branch: staging
       zdns_branch: ${{ github.ref_name }}
