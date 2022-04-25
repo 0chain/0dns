@@ -29,10 +29,10 @@ If there is new code, do a git pull and run the following command
 ./docker.local/bin/build.sh
 ```
 
-Go to the bin directory (cd docker.local/bin) and run the container using
+Run the container using
 
 ```
-./start.sh
+./docker.local/bin/start.sh
 ```
 
 ## Point to another blockchain
