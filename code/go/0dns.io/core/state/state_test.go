@@ -60,10 +60,6 @@ func TestSetFromCurrentMagicBlock(t *testing.T) {
 		},
 	}
 
-	state.Miners = wantMiners
-	state.Sharders = wantSharders
-	state.CurrentMagicBlock = wantMagicBlock
-
 	SetFromCurrentMagicBlock(config.Config{}, wantMagicBlock)
 	got := Get()
 
