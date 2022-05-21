@@ -1,6 +1,7 @@
 package main
 
 import (
+	"0dns.io/core/state"
 	"context"
 	"encoding/json"
 	"flag"
@@ -55,8 +56,7 @@ func initializeMagicBlock(magicBlockFile string) {
 		panic("Unable to unmarshal magic block bytes")
 	}
 
-	config.Configuration.CurrentMagicBlock = &m
-	config.Configuration.SetMinerSharderNodes()
+	state.SetFromCurrentMagicBlock(config.Configuration, &m)
 }
 
 func initHandlers(r *mux.Router) {
@@ -127,10 +127,12 @@ func main() {
 }
 
 func HomePageHandler(w http.ResponseWriter, r *http.Request) {
+	s := state.Get()
+
 	fmt.Fprintf(w, "<div>Running since %v ...\n", startTime)
 	fmt.Fprintf(w, "<div>Working on the chain: %v</div>\n", config.Configuration.ChainID)
 	fmt.Fprintf(w, "<div>I am 0dns with <ul><li>miners:%v</li><li>sharders:%v</li></ul></div>\n",
-		config.Configuration.Miners, config.Configuration.Sharders)
+		s.Miners, s.Sharders)
 }
 
 func NetworkDetailsHandler(w http.ResponseWriter, r *http.Request) {
@@ -139,15 +141,17 @@ func NetworkDetailsHandler(w http.ResponseWriter, r *http.Request) {
 		Sharders []string `json:"sharders"`
 	}
 
-	response.Miners = config.Configuration.Miners
-	response.Sharders = config.Configuration.Sharders
+	s := state.Get()
+
+	response.Miners = s.Miners
+	response.Sharders = s.Sharders
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
 }
 
 func LatestMagicBlockHandler(w http.ResponseWriter, r *http.Request) {
-	magicBlock := config.Configuration.CurrentMagicBlock
+	magicBlock := state.Get().CurrentMagicBlock
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(magicBlock)
