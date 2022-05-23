@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"0dns.io/core/state"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -39,8 +40,7 @@ func FetchMagicBlock(ctx context.Context) {
 				continue
 			}
 
-			config.Configuration.UpdateMagicBlock(magicBlock)
-			config.Configuration.SetMinerSharderNodes()
+			state.SetFromCurrentMagicBlock(config.Configuration, magicBlock)
 			Logger.Info("Magic block updated successfully", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
 		}
 	}
@@ -57,10 +57,12 @@ func GetMagicBlockByNumber(ctx context.Context, number int64) (m *block.MagicBlo
 // fetchMagicBlock - waits till we get the magic block from all the sharders
 // and returns the block which gets max consensus.
 func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, err error) {
-	numSharders := len(config.Configuration.Sharders)
+	s := state.Get()
+
+	numSharders := len(s.Sharders)
 	var result = make(chan *util.GetResponse, numSharders)
 	defer close(result)
-	queryMagicBlockFromSharders(ctx, query, result)
+	queryMagicBlockFromSharders(ctx, query, s.Sharders, result)
 
 	var (
 		maxConsensus   int
@@ -100,8 +102,8 @@ func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, er
 	return m, err
 }
 
-func queryMagicBlockFromSharders(ctx context.Context, query string, result chan *util.GetResponse) {
-	for _, sharder := range util.Shuffle(config.Configuration.Sharders) {
+func queryMagicBlockFromSharders(ctx context.Context, query string, sharders []string, result chan *util.GetResponse) {
+	for _, sharder := range util.Shuffle(sharders) {
 		go func(sharderurl string) {
 			url := fmt.Sprintf("%v%v", sharderurl, query)
 			req, err := util.NewHTTPGetRequestContext(ctx, url)
