@@ -1,0 +1,14 @@
+version: "3"
+services:
+  docker-clean:
+    build:
+      context: '.'
+      dockerfile: Dockerfile
+    volumes:
+      - ../0dns/mongodata:/data/db
+      - ../0dns/log:/0dns/log
+    command: /bin/sh docker-clean.sh
+
+volumes:
+  mongodata: {}
+  log: {}
