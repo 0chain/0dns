@@ -136,15 +136,21 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func NetworkDetailsHandler(w http.ResponseWriter, r *http.Request) {
+	type stats struct {
+		StartTime time.Time `json:"start_time"`
+	}
+
 	var response struct {
 		Miners   []string `json:"miners"`
 		Sharders []string `json:"sharders"`
+		Stats    stats    `json:"stats"`
 	}
 
 	s := state.Get()
 
 	response.Miners = s.Miners
 	response.Sharders = s.Sharders
+	response.Stats = stats{startTime}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(response)
