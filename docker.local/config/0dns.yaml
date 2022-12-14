@@ -13,7 +13,7 @@ server_chain:
   signature_scheme: "bls0chain"
 
 handlers:
-  rate_limit: 5 # 5 per second
+  rate_limit: 0 # unlimited
 
 worker:
   magic_block_worker: 5 # in seconds
