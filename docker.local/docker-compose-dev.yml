@@ -1,9 +1,11 @@
 version: "3"
 services:
   0dns:
-    image: 0chaindev/0dns:staging
     environment:
       - DOCKER=true
+    build:
+      context: ../
+      dockerfile: ./docker.local/Dockerfile
     volumes:
       - ./config:/0dns/config
       - ./0dns/log:/0dns/log
@@ -13,7 +15,7 @@ services:
       default:
       testnet0:
         ipv4_address: 198.18.0.98
-    command: ./bin/zdns --deployment_mode 0 --magic_block /0dns/config/b0magicBlock.json
+    command: ./bin/zdns --deployment_mode 0 --magic_block /0dns/config/magic_block.json
 
 networks:
   default:
