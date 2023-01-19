@@ -14,7 +14,7 @@ services:
     environment:
       - DOCKER=true
     build:
-      context: ./
+      context: ../
       dockerfile: ./docker.local/Dockerfile
     depends_on:
       - mongodb
