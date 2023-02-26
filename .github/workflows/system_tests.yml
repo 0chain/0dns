@@ -74,3 +74,4 @@ jobs:
       DEV7KC: ${{ secrets.DEV7KC }}
       DEV8KC: ${{ secrets.DEV8KC }}
       DEV9KC: ${{ secrets.DEV9KC }}
+      TENDERLY_FORK_ID: ${{ secrets.TENDERLY_FORK_ID }}
