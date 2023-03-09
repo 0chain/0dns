@@ -53,7 +53,8 @@ jobs:
 
        - name: Build & Publish 0dns Docker Image
          run: |
-            docker buildx build --platform linux/arm64 -t zdns:latest -f "$DOCKERFILE_DNS" .
+            docker buildx create --driver-opt network=host --use --buildkitd-flags '--allow-insecure-entitlement security.insecure' --use dns_buildx
+            docker buildx build --platform linux/amd64,linux/arm64 -t zdns:latest -f "$DOCKERFILE_DNS" .
             docker tag zdns:latest $DNS_REGISTRY:$TAG
             docker push $DNS_REGISTRY:$TAG
 
