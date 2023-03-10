@@ -73,7 +73,7 @@ jobs:
          uses: jwalton/gh-find-current-pr@v1
          id: findPr
          with:
-           github-token: ${{ secrets.ACCESS_TOKEN }}
+           github-token: ${{ github.token }}
             
        - name: "Set PR status as pending"
          uses: niteoweb/pull_request_status_action@v1.0.0
@@ -86,7 +86,7 @@ jobs:
            context: "0Chain System Tests"
            target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
          env:
-           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+           GITHUB_TOKEN: ${{ github.token }}
 
        - name: "Setup"
          run: |
@@ -133,7 +133,7 @@ jobs:
            zbox_cli_branch: staging
            zwallet_cli_branch: staging
            smart_contract_owner_wallet_json: ${{ secrets.SMART_CONTRACT_OWNER_WALLET_JSON }}
-           svc_account_secret: ${{ secrets.ACCESS_TOKEN }}
+           svc_account_secret: ${{ github.token }}
            deploy_report_page: false
            archive_results: true
            run_flaky_tests: false
