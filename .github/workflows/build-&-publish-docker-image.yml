@@ -151,4 +151,4 @@ jobs:
            context: "0Chain System Tests"
            target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
          env:
-           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+           GITHUB_TOKEN: ${{ github.token }}
