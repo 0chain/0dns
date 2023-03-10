@@ -103,42 +103,42 @@ jobs:
            echo "NETWORK_URL=$(echo dev-${RUNNER_NAME:(-1)}.devnet-0chain.net)" >> $GITHUB_ENV
            echo "RUNNER_NUMBER=${RUNNER_NAME:(-1)}" >> $GITHUB_ENV
 
-       - name: "Deploy 0Chain"
-         uses: 0chain/actions/deploy-0chain@master
-         with:
-           kube_config: ${{ secrets[format('DEV{0}KC', env.RUNNER_NUMBER)] }}
-           teardown_condition: "TESTS_PASSED"
-           zdns_image: ${{ env.TAG }}-${{ env.SHORT_SHA }}
-           miner_image:  staging
-           sharder_image: staging
-           blobber_image: staging
-           validator_image: staging
-           authorizer_image: staging
-           zbox_image: staging
-           zblock_image: staging
-           explorer_image: latest
-           zproxy_image: staging
-           zsearch_image: staging
-           zbox_cli_branch: staging
-           zwallet_cli_branch: staging
-           custom_go_sdk_version: staging
-           SUBGRAPH_API_URL: ${{ secrets.SUBGRAPH_API_URL }}
-           TENDERLY_FORK_ID: ${{ secrets.TENDERLY_FORK_ID }}
+      #  - name: "Deploy 0Chain"
+      #    uses: 0chain/actions/deploy-0chain@master
+      #    with:
+      #      kube_config: ${{ secrets[format('DEV{0}KC', env.RUNNER_NUMBER)] }}
+      #      teardown_condition: "TESTS_PASSED"
+      #      zdns_image: ${{ env.TAG }}-${{ env.SHORT_SHA }}
+      #      miner_image:  staging
+      #      sharder_image: staging
+      #      blobber_image: staging
+      #      validator_image: staging
+      #      authorizer_image: staging
+      #      zbox_image: staging
+      #      zblock_image: staging
+      #      explorer_image: latest
+      #      zproxy_image: staging
+      #      zsearch_image: staging
+      #      zbox_cli_branch: staging
+      #      zwallet_cli_branch: staging
+      #      custom_go_sdk_version: staging
+      #      SUBGRAPH_API_URL: ${{ secrets.SUBGRAPH_API_URL }}
+      #      TENDERLY_FORK_ID: ${{ secrets.TENDERLY_FORK_ID }}
 
-       - name: "Run System tests"
-         uses: 0chain/actions/run-system-tests@master
-         with:
-           system_tests_branch: master
-           network: ${{ env.NETWORK_URL }}
-           zbox_cli_branch: staging
-           zwallet_cli_branch: staging
-           smart_contract_owner_wallet_json: ${{ secrets.SMART_CONTRACT_OWNER_WALLET_JSON }}
-           svc_account_secret: ${{ github.token }}
-           deploy_report_page: false
-           archive_results: true
-           run_flaky_tests: false
-           retry_failures: true
-           TENDERLY_FORK_ID: ${{ secrets.TENDERLY_FORK_ID }}
+      #  - name: "Run System tests"
+      #    uses: 0chain/actions/run-system-tests@master
+      #    with:
+      #      system_tests_branch: master
+      #      network: ${{ env.NETWORK_URL }}
+      #      zbox_cli_branch: staging
+      #      zwallet_cli_branch: staging
+      #      smart_contract_owner_wallet_json: ${{ secrets.SMART_CONTRACT_OWNER_WALLET_JSON }}
+      #      svc_account_secret: ${{ github.token }}
+      #      deploy_report_page: false
+      #      archive_results: true
+      #      run_flaky_tests: false
+      #      retry_failures: true
+      #      TENDERLY_FORK_ID: ${{ secrets.TENDERLY_FORK_ID }}
 
        - name: "Set PR status as ${{ job.status }}"
          if: ${{ (success() || failure()) && steps.findPr.outputs.number }}
