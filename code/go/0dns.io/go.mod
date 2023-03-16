@@ -1,7 +1,7 @@
 module 0dns.io
 
 require (
-	github.com/0chain/gosdk v1.8.12
+	github.com/0chain/gosdk v1.8.14
 	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/spf13/viper v1.13.0
@@ -11,7 +11,7 @@ require (
 )
 
 require (
-	github.com/0chain/common v0.0.5 // indirect
+	github.com/0chain/common v0.0.6-0.20221123040931-4a3feacdb97c // indirect
 	github.com/0chain/errors v1.0.3 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
@@ -24,6 +24,7 @@ require (
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/spf13/afero v1.9.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
