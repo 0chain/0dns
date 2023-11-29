@@ -110,19 +110,19 @@ jobs:
                force: 'false'
                      
        - name: "Create Tenderly fork"
-        run: |
+         run: |
           echo "TENDERLY_CREATION_INFO=$(curl -X POST \
               -H "x-access-key: ${{ secrets.TENDERLY_SECRET }}" \
               -H "Content-Type: application/json" \
               -d '{"alias":"mainnet-dev-${{ env.RUNNER_NUMBER }}-${{ github.run_id }}", "description":"", "network_id":"1"}' \
               https://api.tenderly.co/api/v1/account/zus_network/project/project/fork)" >> $GITHUB_ENV
        - name: "Parse Tenderly fork creation transaction result"
-        run: |
+         run: |
           echo "TENDERLY_FORK_ID=$(echo '${{ env.TENDERLY_CREATION_INFO }}' | jq -r '.simulation_fork.id')" >> $GITHUB_ENV
           echo "TENDERLY_ROOT_TRANSACTION_ID=$(echo '${{ env.TENDERLY_CREATION_INFO }}' | jq -r '.root_transaction.id')" >> $GITHUB_ENV
 
        - name: "Retrieve Tenderly fork block number"
-        run: |
+         run: |
           echo "TENDERLY_FORK_BLOCK_NUMBER=$(curl -X GET \
               -H "x-access-key: ${{ secrets.TENDERLY_SECRET }}" \
               -H "Content-Type: application/json" \
@@ -131,7 +131,7 @@ jobs:
           echo "TENDERLY_FORK_BLOCK_NUMBER=$((${{ env.TENDERLY_FORK_BLOCK_NUMBER }} + 1))" >> GITHUB_ENV
 
        - name: "Transfer Bridge ownership in Tenderly fork"
-        run: |
+         run: |
           echo "TENDERLY_ROOT_TRANSACTION_ID=$(curl -X POST \
               -H "x-access-key: ${{ secrets.TENDERLY_SECRET }}" \
               -H "Content-Type: application/json" \
@@ -160,7 +160,7 @@ jobs:
           echo "TENDERLY_FORK_BLOCK_NUMBER=$((${{ env.TENDERLY_FORK_BLOCK_NUMBER }} + 1))" >> GITHUB_ENV
 
        - name: "Transfer Authorizers ownership in Tenderly fork"
-        run: |
+         run: |
           curl -X POST \
               -H "x-access-key: ${{ secrets.TENDERLY_SECRET }}" \
               -H "Content-Type: application/json" \
