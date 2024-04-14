@@ -64,6 +64,7 @@ func initHandlers(r *mux.Router) {
 	r.Use(useCors)
 
 	r.HandleFunc("/", common.UserRateLimit(HomePageHandler))
+	r.HandleFunc("/dns", common.UserRateLimit(HomePageHandler))
 	r.HandleFunc("/network", common.UserRateLimit(NetworkDetailsHandler))
 	r.HandleFunc("/magic_block", common.UserRateLimit(LatestMagicBlockHandler))
 }
