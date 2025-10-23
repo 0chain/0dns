@@ -44,25 +44,6 @@
           "avg_block_txns": 0
         }
       },
-      "8877e3da19b4cb51e59b4646ec7c0cf4849bc7b860257d69ddbf753b9a981e1b": {
-        "id": "8877e3da19b4cb51e59b4646ec7c0cf4849bc7b860257d69ddbf753b9a981e1b",
-        "version": "",
-        "creation_date": 0,
-        "public_key": "6059d12b7796b101e61c38bb994ebb830280870af2e4ee6d7d7810d110b8e50a61ede17bb5bf31b7208c19f3b9ca6f525ba8e17c14b9f7c8347e84c8375b8d1f",
-        "n2n_host": "198.18.0.74",
-        "host": "localhost",
-        "port": 7074,
-        "type": 0,
-        "description": "localhost.m3",
-        "set_index": 2,
-        "status": 0,
-        "info": {
-          "build_tag": "",
-          "state_missing_nodes": 0,
-          "miners_median_network_time": 0,
-          "avg_block_txns": 0
-        }
-      },
       "bfa64c67f49bceec8be618b1b6f558bdbaf9c100fd95d55601fa2190a4e548d8": {
         "id": "bfa64c67f49bceec8be618b1b6f558bdbaf9c100fd95d55601fa2190a4e548d8",
         "version": "",
@@ -98,6 +79,25 @@
         "type": 1,
         "description": "localhost.s0",
         "set_index": 0,
+        "status": 0,
+        "info": {
+          "build_tag": "",
+          "state_missing_nodes": 0,
+          "miners_median_network_time": 0,
+          "avg_block_txns": 0
+        }
+      },
+      "b098d2d56b087ee910f3ee2d2df173630566babb69f0be0e2e9a0c98d63f0b0b": {
+        "id": "b098d2d56b087ee910f3ee2d2df173630566babb69f0be0e2e9a0c98d63f0b0b",
+        "version": "",
+        "creation_date": 0,
+        "public_key": "66dd43a9e7a2c5b18e495b7480ef458d220475df74156c3428cc2965fea1dd168aa17b8c2dcf42ad01411b19a8e9482dafc79d5508d743cfaf7b80d0f95fd582",
+        "n2n_host": "198.18.0.82",
+        "host": "localhost",
+        "port": 7172,
+        "type": 1,
+        "description": "localhost.s1",
+        "set_index": 1,
         "status": 0,
         "info": {
           "build_tag": "",
