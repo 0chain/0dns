@@ -6,6 +6,7 @@ There is a [Network API](#network-api) which can be used to get latest set of mi
 ## Table of Contents
 - [Züs Overview](#züs-overview)
 - [Setup](#setup)
+- [Local Development](#local-development)
 - [Buildding and starting the node](#building-and-starting-the-node)
 - [Point to another blockchain](#point-to-another-blockchain)
 - [Exposed APIs](#exposed-apis)
@@ -34,6 +35,28 @@ Clone the repo and run the following command inside the cloned directory
 
 ```
 ./docker.local/bin/init.sh
+```
+
+## Local Development
+
+When using 0dns for local development, you need to configure the `docker.local/config/0dns.yaml` file to disable HTTPS and path-based routing. This ensures that the miner and sharder URLs returned by the Network API work correctly in a local environment.
+
+Update `docker.local/config/0dns.yaml` and set:
+
+```yaml
+use_https: false
+use_path: false
+```
+
+These settings ensure that:
+- URLs use `http://` instead of `https://` (appropriate for local development)
+- URLs don't include path prefixes, making them compatible with local network configurations
+
+**Note:** After making these changes, restart the 0dns service for the changes to take effect:
+
+```
+./docker.local/bin/stop.sh
+./docker.local/bin/start.sh
 ```
 
 ## Building and Starting the Node
