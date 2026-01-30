@@ -45,8 +45,9 @@ type Config struct {
 
 	MagicBlockWorkerTimerInSeconds int64
 
-	UseHTTPS bool
-	UsePath  bool
+	UseHTTPS    bool
+	UsePath     bool
+	UseLocalhost bool // When true, keeps localhost/127.0.0.1 as host instead of replacing with N2NHost
 }
 
 /*Configuration of the system */

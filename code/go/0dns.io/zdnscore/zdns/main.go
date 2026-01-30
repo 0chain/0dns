@@ -34,6 +34,7 @@ func initializeConfig() {
 
 	config.Configuration.UseHTTPS = viper.GetBool("use_https")
 	config.Configuration.UsePath = viper.GetBool("use_path")
+	config.Configuration.UseLocalhost = viper.GetBool("use_localhost")
 }
 
 func initializeMagicBlock(magicBlockFile string) {

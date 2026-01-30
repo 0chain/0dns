@@ -1,8 +1,9 @@
 version: 1.0
 
 port: 9091
-use_https: true
-use_path: true
+use_https: false
+use_path: false
+use_localhost: true  # Keep localhost/127.0.0.1 instead of replacing with Docker N2NHost
 
 logging:
   level: "info"
