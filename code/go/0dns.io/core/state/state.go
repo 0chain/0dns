@@ -17,8 +17,9 @@ const (
 // State defines the latest state of network based on most recent magic block.
 type State struct {
 	sync.RWMutex
-	Miners            []string
-	Sharders          []string
+	Miners            []string // External URLs (localhost) for serving to clients
+	Sharders          []string // External URLs (localhost) for serving to clients
+	InternalSharders  []string // Internal URLs (N2NHost) for fetching magic blocks
 	CurrentMagicBlock *block.MagicBlock
 }
 
@@ -33,6 +34,7 @@ func Get() State {
 	return State{
 		Miners:            state.Miners,
 		Sharders:          state.Sharders,
+		InternalSharders:  state.InternalSharders,
 		CurrentMagicBlock: state.CurrentMagicBlock,
 	}
 }
@@ -50,8 +52,11 @@ func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
 	var miners []string
 	for _, miner := range b.Miners.Nodes {
 		host := miner.Host
-		// Replace localhost with N2NHost unless use_localhost is enabled (for local dev)
-		if !c.UseLocalhost && (strings.Contains(host, "localhost") || strings.Contains(host, "127.0.0.1")) {
+		// When use_localhost is enabled, always use 127.0.0.1 for external URLs (local dev with port mappings)
+		// Otherwise, replace localhost with N2NHost for production
+		if c.UseLocalhost {
+			host = "127.0.0.1"
+		} else if strings.Contains(host, "localhost") || strings.Contains(host, "127.0.0.1") {
 			host = miner.N2NHost
 		}
 
@@ -71,16 +76,28 @@ func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
 	}
 
 	var sharders []string
+	var internalSharders []string
 	for _, sharder := range b.Sharders.Nodes {
+		// External URL: when use_localhost is enabled, always use 127.0.0.1 (local dev with port mappings)
 		host := sharder.Host
-		// Replace localhost with N2NHost unless use_localhost is enabled (for local dev)
-		if !c.UseLocalhost && (strings.Contains(host, "localhost") || strings.Contains(host, "127.0.0.1")) {
+		if c.UseLocalhost {
+			host = "127.0.0.1"
+		} else if strings.Contains(host, "localhost") || strings.Contains(host, "127.0.0.1") {
 			host = sharder.N2NHost
 		}
+
+		// Internal URL: always use N2NHost for fetching from container
+		internalHost := sharder.N2NHost
+
 		if c.UsePath {
 			sharders = append(sharders,
 				networkProtocol+
 					host+
+					"/"+
+					sharder.Path)
+			internalSharders = append(internalSharders,
+				networkProtocol+
+					internalHost+
 					"/"+
 					sharder.Path)
 		} else {
@@ -89,11 +106,17 @@ func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
 					host+
 					":"+
 					strconv.Itoa(sharder.Port))
+			internalSharders = append(internalSharders,
+				networkProtocol+
+					internalHost+
+					":"+
+					strconv.Itoa(sharder.Port))
 		}
 	}
 
 	logging.Logger.Info("miners: " + strings.Join(miners, ", "))
 	logging.Logger.Info("sharders: " + strings.Join(sharders, ", "))
+	logging.Logger.Info("internal sharders: " + strings.Join(internalSharders, ", "))
 
 	state.Lock()
 	defer state.Unlock()
@@ -101,4 +124,5 @@ func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
 	state.CurrentMagicBlock = b
 	state.Miners = miners
 	state.Sharders = sharders
+	state.InternalSharders = internalSharders
 }

@@ -1,7 +1,9 @@
 version: "3"
 services:
   0dns:
-    image: 0chaindev/0dns:staging
+    build:
+      context: ../
+      dockerfile: ./docker.local/Dockerfile
     environment:
       - DOCKER=true
     volumes:
@@ -10,14 +12,11 @@ services:
     ports:
       - "9091:9091"
     networks:
-      default:
       testnet0:
         ipv4_address: 198.18.0.98
     command: ./bin/zdns --deployment_mode 0 --magic_block /0dns/config/b0magicBlock.json
 
 networks:
-  default:
-    driver: bridge
   testnet0:
     external: true
 

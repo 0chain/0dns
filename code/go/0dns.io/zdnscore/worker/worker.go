@@ -59,10 +59,17 @@ func GetMagicBlockByNumber(ctx context.Context, number int64) (m *block.MagicBlo
 func fetchMagicBlock(ctx context.Context, query string) (m *block.MagicBlock, err error) {
 	s := state.Get()
 
-	numSharders := len(s.Sharders)
+	// Use InternalSharders for fetching (N2NHost addresses work from container)
+	sharders := s.InternalSharders
+	if len(sharders) == 0 {
+		// Fallback to regular Sharders if InternalSharders not set
+		sharders = s.Sharders
+	}
+
+	numSharders := len(sharders)
 	var result = make(chan *util.GetResponse, numSharders)
 	defer close(result)
-	queryMagicBlockFromSharders(ctx, query, s.Sharders, result)
+	queryMagicBlockFromSharders(ctx, query, sharders, result)
 
 	var (
 		maxConsensus   int
