@@ -50,7 +50,8 @@ func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
 	var miners []string
 	for _, miner := range b.Miners.Nodes {
 		host := miner.Host
-		if strings.Contains(host, "localhost") {
+		// Replace localhost with N2NHost unless use_localhost is enabled (for local dev)
+		if !c.UseLocalhost && (strings.Contains(host, "localhost") || strings.Contains(host, "127.0.0.1")) {
 			host = miner.N2NHost
 		}
 
@@ -72,7 +73,8 @@ func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
 	var sharders []string
 	for _, sharder := range b.Sharders.Nodes {
 		host := sharder.Host
-		if strings.Contains(host, "localhost") {
+		// Replace localhost with N2NHost unless use_localhost is enabled (for local dev)
+		if !c.UseLocalhost && (strings.Contains(host, "localhost") || strings.Contains(host, "127.0.0.1")) {
 			host = sharder.N2NHost
 		}
 		if c.UsePath {
