@@ -40,8 +40,9 @@ func FetchMagicBlock(ctx context.Context) {
 				continue
 			}
 
-			state.SetFromCurrentMagicBlock(config.Configuration, magicBlock)
-			Logger.Info("Magic block updated successfully", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
+			if state.SetFromCurrentMagicBlock(config.Configuration, magicBlock) {
+				Logger.Info("Magic block updated successfully", zap.Any("magic_block_number", magicBlock.MagicBlockNumber))
+			}
 		}
 	}
 }

@@ -1,12 +1,14 @@
 package state
 
 import (
-	"0dns.io/core/config"
-	"0dns.io/core/logging"
-	"github.com/0chain/gosdk/core/block"
 	"strconv"
 	"strings"
 	"sync"
+
+	"0dns.io/core/config"
+	"0dns.io/core/logging"
+	"github.com/0chain/gosdk/core/block"
+	"go.uber.org/zap"
 )
 
 const (
@@ -39,9 +41,20 @@ func Get() State {
 	}
 }
 
-func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
+func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) bool {
 	if b == nil {
 		panic("Unexpected missing magic block")
+	}
+
+	// Only update if new magic block number is higher than current
+	state.RLock()
+	currentMB := state.CurrentMagicBlock
+	state.RUnlock()
+	if currentMB != nil && b.MagicBlockNumber <= currentMB.MagicBlockNumber {
+		logging.Logger.Debug("ignoring older magic block",
+			zap.Int64("current", currentMB.MagicBlockNumber),
+			zap.Int64("received", b.MagicBlockNumber))
+		return false
 	}
 
 	networkProtocol := HTTPProtocol
@@ -125,4 +138,5 @@ func SetFromCurrentMagicBlock(c config.Config, b *block.MagicBlock) {
 	state.Miners = miners
 	state.Sharders = sharders
 	state.InternalSharders = internalSharders
+	return true
 }
